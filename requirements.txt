@@ -1,0 +1,8 @@
+numpy==1.18.5
+tensorflow-gpu==2.3.0
+tensorflow_datasets==4.0.1
+opencv-python==4.4.0.42
+matplotlib==3.3.2
+pydot==1.4.1
+scikit-image
+protobuf==3.11.2
