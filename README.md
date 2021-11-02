@@ -86,8 +86,8 @@ These results are denoted with * in the comparison tables.
 ### Testing
 
 1. Download the pretrained weights:
-    - AffordanceNet trained on IIT-AFF dataset
-    - AffContext trained on UMD dataset
+    - AffordanceNet [weights](https://www.dropbox.com/s/ze7asu9syte235x/affordancenet_iit.hdf5?dl=0) trained on IIT-AFF dataset.
+    - AffContext [weights](https://www.dropbox.com/s/yp7jb1sjrhdllm9/affcontext_umd.hdf5?dl=0) trained on UMD dataset. 
 
 3. Extract the file into `$AffordanceNet_ROOT/weights` folder.
 
