@@ -111,7 +111,7 @@ if __name__ == '__main__':
         img, image_shape, true_bboxes, true_labels, true_masks, mask_ids = image_data
         pred_bboxes, pred_labels, pred_scores, pred_masks = frcnn_model.predict([img], verbose=1)
 
-        image_shape = tf.squeeze(image_shape, axis=0).numpy().astype(np.int)
+        image_shape = tf.squeeze(image_shape, axis=0).numpy().astype(int)
 
         # Evaluate results
         if cfg.EVALUATE:

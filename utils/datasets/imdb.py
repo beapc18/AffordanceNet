@@ -14,7 +14,7 @@ import scipy.sparse
 # from fast_rcnn.config import cfg
 import skimage
 
-from config_files.config_iit_masks import Config
+from config_files.config_iit_train import Config
 
 cfg = Config()
 

@@ -186,7 +186,7 @@ def update_final_masks(final_gt_mask, final_pred_mask, gt_bbox, gt_mask, pred_ma
 
     # crop only bbox area and add it to final gt_mask
     y1, x1, y2, x2 = tf.split(denormalized_bboxes, 4)
-    y1, x1, y2, x2 = y1.numpy().astype(np.int)[0], x1.numpy().astype(np.int)[0], y2.numpy().astype(np.int)[0], x2.numpy().astype(np.int)[0]
+    y1, x1, y2, x2 = y1.numpy().astype(int)[0], x1.numpy().astype(int)[0], y2.numpy().astype(int)[0], x2.numpy().astype(int)[0]
     bbox_width = x2 - x1
     bbox_height = y2 - y1
     gt_mask = gt_mask[y1:y2, x1:x2]
@@ -229,7 +229,7 @@ def update_stats_affordances(stats, final_gt_mask, final_pred_mask):
         D = final_pred_mask.copy()
         D[D != id] = 0
         D[D == id] = 1
-        D = D.astype(np.float)
+        D = D.astype(float)
 
         # Calculate Euclidean distance for each pixel to the closest FG pixel and closest pixel
         # (logical not because the function calculates distance to BG pixels)
