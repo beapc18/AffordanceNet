@@ -131,8 +131,8 @@ def convert_mask_to_original_ids_manual(mask, original_uni_ids):
     #     out_mask = original_uni_ids[(np.abs(mask - original_uni_ids[:,None,None]) < const).argmax(0)]
     return out_mask
 
-def draw_bboxes_with_labels_and_masks(img, true_bboxes, true_labels, bboxes, label_indices, probs, labels,
-                            use_masks=False, true_masks=None, mask_ids=None, pred_masks=None, aff_labels=None, dataset='iit'):
+def draw_bboxes_with_labels_and_masks(img, bboxes, label_indices, probs, labels,
+                            use_masks=False, pred_masks=None, aff_labels=None, dataset='iit'):
     """Drawing bounding boxes with labels on given image.
     inputs:
         img = (height, width, channels)
@@ -223,6 +223,7 @@ def draw_bboxes_with_labels_and_masks(img, true_bboxes, true_labels, bboxes, lab
     plt.imshow(image)
     plt.axis('off')
     plt.show()
+    image.save("Classified_img.png")
     image = image_copy.copy()
 
 def draw_true_bboxes(true_bboxes, true_labels, labels, draw):
@@ -248,15 +249,14 @@ def draw_predictions(img, true_bboxes, true_labels, pred_bboxes, pred_labels, pr
     draw_bboxes_with_labels(img, denormalized_true_bboxes, true_labels, denormalized_bboxes, pred_labels, pred_scores, labels,
                      use_masks, true_masks, mask_ids, pred_masks)
 
-def draw_predictions_with_masks(img, true_bboxes, true_labels, pred_bboxes, pred_labels, pred_scores, labels, batch_size,
-                     use_masks=False, true_masks=None, mask_ids=None, pred_masks=None, aff_labels=None, dataset='iit'):
+def draw_predictions_with_masks(img, pred_bboxes, pred_labels, pred_scores, labels, batch_size,
+                     use_masks=False, pred_masks=None, aff_labels=None, dataset='iit'):
     img_height, img_width = img.shape[0], img.shape[1]
     # denormalized_true_bboxes = bbox_utils.denormalize_bboxes(true_bboxes, img_height, img_width)
-    denormalized_true_bboxes = true_bboxes
     denormalized_bboxes = bbox_utils.denormalize_bboxes(pred_bboxes, img_height, img_width)
-    draw_bboxes_with_labels_and_masks(img, denormalized_true_bboxes, true_labels, denormalized_bboxes, pred_labels,
+    draw_bboxes_with_labels_and_masks(img, denormalized_bboxes, pred_labels,
                                       pred_scores, labels,
-                                      use_masks, true_masks, mask_ids, pred_masks, aff_labels, dataset)
+                                      use_masks, pred_masks, aff_labels, dataset)
 
 def draw_proposals(cfg, img, true_bboxes, true_labels, pred_bboxes, pred_labels,
                    pred_deltas_proposals, pred_labels_proposals, all_rois, rois_ok,

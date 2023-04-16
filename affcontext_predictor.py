@@ -52,7 +52,7 @@ if __name__ == '__main__':
     args = io_utils.handle_args()
     # print('Config file:', args.config_file)
     config = importlib.import_module('config_files.' + args.config_file)
-    cfg = config.ConfigUmdTest()
+    cfg = config.ConfigIitTest()
 
     # import backbone
     if cfg.BACKBONE == "mobilenet_v2":
@@ -112,6 +112,8 @@ if __name__ == '__main__':
         if i == total_items:
             break
         print('Image', i)
+        print(type(img))
+        print("after")
         img, image_shape, true_bboxes, true_labels, true_masks, mask_ids = image_data
         pred_bboxes, pred_labels, pred_scores, pred_masks = aff_context_model.predict([img], verbose=1)
 
@@ -133,11 +135,14 @@ if __name__ == '__main__':
 
             # save bboxes for posterior evaluation
             for bbox_index, bbox in enumerate(pred_bboxes):
-                c = int(pred_labels[bbox_index].numpy())
-                denormalized_bboxes = bbox_utils.denormalize_bboxes(bbox, image_shape[0], image_shape[1])
-                y1, x1, y2, x2 = denormalized_bboxes
-                box_score = np.hstack([x1, y1, x2, y2, pred_scores[bbox_index]])
-                all_boxes[c][i] = np.vstack([all_boxes[c][i], box_score])
+                try:
+                  c = int(pred_labels[bbox_index].numpy())
+                  denormalized_bboxes = bbox_utils.denormalize_bboxes(bbox, image_shape[0], image_shape[1])
+                  y1, x1, y2, x2 = denormalized_bboxes
+                  box_score = np.hstack([x1, y1, x2, y2, pred_scores[bbox_index]])
+                  all_boxes[c][i] = np.vstack([all_boxes[c][i], box_score])
+                except:
+                  print("save box failed to stack")
 
         # Visualize results
         if cfg.VISUALIZE:

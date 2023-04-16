@@ -14,6 +14,8 @@ class Config(object):
     DATA_DIR = os.path.join(ROOT_DIR, 'data')
     VOC_DOWNLOAD_DIR = os.path.join(DATA_DIR, 'voc_download')
     STORE_BBOXES_DIR = os.path.join(ROOT_DIR, 'detections')
+    print("boxes are stored at:")
+    print(STORE_BBOXES_DIR)
     CHECKPOINT_DIR = os.path.join(ROOT_DIR, "checkpoints", FILES_NAME, "ckpt")
     LOG_DIR = os.path.join(ROOT_DIR, "logs", FILES_NAME)
     WEIGHTS_FILE = os.path.join(ROOT_DIR, "weights", FILES_NAME+".hdf5")
@@ -39,8 +41,8 @@ class Config(object):
     USE_WEIGHTS = False
     BACKBONE = 'vgg16'      # vgg16 or mobilenet_v2
     EVALUATE = False
-    VISUALIZE = False
-    STORE_BBOXES = False
+    VISUALIZE = True
+    STORE_BBOXES = True
     MASK_REG = True         # Include masks
     RUN_EAGERLY = False
     USE_FLIPPED = False      # Add flipped images for training only

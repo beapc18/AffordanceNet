@@ -109,6 +109,7 @@ if __name__ == '__main__':
             break
         print('Image', i)
         img, image_shape, true_bboxes, true_labels, true_masks, mask_ids = image_data
+        print(img)
         pred_bboxes, pred_labels, pred_scores, pred_masks = frcnn_model.predict([img], verbose=1)
 
         image_shape = tf.squeeze(image_shape, axis=0).numpy().astype(int)
@@ -120,20 +121,24 @@ if __name__ == '__main__':
                                                                   image_shape[0], image_shape[1], cfg.TEST_NMS_THRESHOLD)
 
         # Store the final results
-        if cfg.STORE_BBOXES:
-            img = tf.squeeze(img, axis=0)
-            pred_bboxes = tf.squeeze(pred_bboxes, axis=0)
-            pred_labels = tf.squeeze(pred_labels, axis=0)
-            pred_scores = tf.squeeze(pred_scores, axis=0)
-            true_bboxes = tf.squeeze(true_bboxes, axis=0)
-            true_labels = tf.squeeze(true_labels, axis=0)
-            # save bboxes for posterior evaluation
-            for bbox_index, bbox in enumerate(pred_bboxes):
-                c = int(pred_labels[bbox_index].numpy())
-                denormalized_bboxes = bbox_utils.denormalize_bboxes(bbox, image_shape[0], image_shape[1])
-                y1, x1, y2, x2 = denormalized_bboxes
-                box_score = np.hstack([x1, y1, x2, y2, pred_scores[bbox_index]])
-                all_boxes[c][i] = np.vstack([all_boxes[c][i], box_score])
+        try:
+          if cfg.STORE_BBOXES:
+              img = tf.squeeze(img, axis=0)
+              pred_bboxes = tf.squeeze(pred_bboxes, axis=0)
+              pred_labels = tf.squeeze(pred_labels, axis=0)
+              pred_scores = tf.squeeze(pred_scores, axis=0)
+              true_bboxes = tf.squeeze(true_bboxes, axis=0)
+              true_labels = tf.squeeze(true_labels, axis=0)
+              # save bboxes for posterior evaluation
+              for bbox_index, bbox in enumerate(pred_bboxes):
+                  c = int(pred_labels[bbox_index].numpy())
+                  denormalized_bboxes = bbox_utils.denormalize_bboxes(bbox, image_shape[0], image_shape[1])
+                  y1, x1, y2, x2 = denormalized_bboxes
+                  box_score = np.hstack([x1, y1, x2, y2, pred_scores[bbox_index]])
+                  all_boxes[c][i] = np.vstack([all_boxes[c][i], box_score])
+        except: 
+          print("couldnt save boxes of that image")
+
 
         # Visualize results
         if cfg.VISUALIZE:
@@ -141,14 +146,10 @@ if __name__ == '__main__':
             pred_bboxes = tf.squeeze(pred_bboxes, axis=0)
             pred_labels = tf.squeeze(pred_labels, axis=0)
             pred_scores = tf.squeeze(pred_scores, axis=0)
-            true_bboxes = tf.squeeze(true_bboxes, axis=0)
-            true_labels = tf.squeeze(true_labels, axis=0)
-
-            true_masks = tf.squeeze(true_masks, axis=0)
-            mask_ids = tf.squeeze(mask_ids, axis=0)
             pred_masks = tf.squeeze(pred_masks, axis=0)
-            drawing_utils.draw_predictions_with_masks(img, true_bboxes, true_labels, pred_bboxes, pred_labels, pred_scores,
-                                           labels, cfg.BATCH_SIZE, cfg.MASK_REG, true_masks, mask_ids, pred_masks, cfg.AFFORDANCE_LABELS, 'iit')
+
+            drawing_utils.draw_predictions_with_masks(img, pred_bboxes, pred_labels, pred_scores,
+                                           labels, cfg.BATCH_SIZE, cfg.MASK_REG, pred_masks, cfg.AFFORDANCE_LABELS, 'iit')
 
     # Calculate final FwB score
     if cfg.EVALUATE:

@@ -19,3 +19,4 @@ class ConfigIitTest(Config):
 
     EVALUATE = True
     VISUALIZE = False
+    STORE_BBOXES = True
