@@ -18,5 +18,5 @@ class ConfigIitTest(Config):
     AFFORDANCE_LABELS = ["background", "contain", "cut", "display", "engine", "grasp", "hit", "pound", "support", "w-grasp"]
 
     EVALUATE = True
-    VISUALIZE = False
-    STORE_BBOXES = True
+    VISUALIZE = True
+    STORE_BBOXES = False
