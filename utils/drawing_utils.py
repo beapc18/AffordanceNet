@@ -1,4 +1,5 @@
 import tensorflow as tf
+import plotly.graph_objs as go
 from PIL import Image, ImageDraw
 import matplotlib.pyplot as plt
 from utils import bbox_utils
@@ -176,6 +177,26 @@ def draw_bboxes_with_labels_and_masks(img, bboxes, label_indices, probs, labels,
         if use_masks:
             mask = pred_masks[index]
             # Calculate max index for each position in the mask -> calculate affordance label
+            mask_np = mask.numpy()
+            traces = []
+            for i in range(0,10):
+              line1 = mask_np[:, :, i]
+
+              trace1 = go.Scatter(
+                  x=np.arange(224),
+                  y=line1.ravel(),
+                  name=('Line ' + str(i))
+              )
+              traces.append(trace1)
+
+            layout = go.Layout(
+                title='Two Lines Plot',
+                xaxis=dict(title='X Axis'),
+                yaxis=dict(title='Y Axis', type='log'),
+            )
+
+            fig = go.Figure(data=traces, layout=layout)
+            fig.write_image(str(index) + "plot.png")
             mask = np.argmax(mask, axis=2)
 
             # calculate distinct affordances avoiding 0
