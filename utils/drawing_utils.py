@@ -179,7 +179,7 @@ def draw_bboxes_with_labels_and_masks(img, bboxes, label_indices, probs, labels,
             # Calculate max index for each position in the mask -> calculate affordance label
             mask_np = mask.numpy()
             traces = []
-            for i in range(0,10):
+            for i in [0,5]:
               line1 = mask_np[:, :, i]
 
               trace1 = go.Scatter(

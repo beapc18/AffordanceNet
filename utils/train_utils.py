@@ -452,6 +452,22 @@ def affordance_mask_loss(*args):
         pred_mask_prob (batch_size, num_positive_rois, 224, 224, 11)
     """
     target_mask, pred_mask_prob = args if len(args) == 2 else args[0]
+
+    array = [1, 1, 1, 1, 1, 0.1, 1, 1, 1, 1]
+    
+    # Get the shape of the input tensor
+    input_shape = tf.shape(pred_mask_prob)
+    
+    # Reshape the input tensor so that the last dimension is a vector of size 10
+    input_tensor_reshaped = tf.reshape(pred_mask_prob, [input_shape[0], input_shape[1], input_shape[2], input_shape[3], -1])
+    
+    # Multiply the last dimension of the tensor by the array
+    output_tensor = tf.multiply(input_tensor_reshaped, array)
+    
+    # Reshape the output tensor back to its original shape
+    output_shape = tf.concat([input_shape[:-1], [tf.shape(output_tensor)[-1]]], axis=0)
+    pred_mask_prob = tf.reshape(output_tensor, output_shape)
+
     target_mask = tf.reshape(target_mask, [tf.shape(target_mask)[0], tf.shape(pred_mask_prob)[1], -1])
     pred_mask_prob = tf.reshape(pred_mask_prob, [tf.shape(target_mask)[0], tf.shape(pred_mask_prob)[1], -1,
                                                  tf.shape(pred_mask_prob)[4]])
